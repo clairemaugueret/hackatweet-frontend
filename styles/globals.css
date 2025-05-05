@@ -10,6 +10,7 @@ body {
   margin: 0;
   font-family: 'Mount Heavy', Verdana, sans-serif;
   background-color: rgb(21, 29, 38);
+  overflow-x: hidden;
 }
 
 * {

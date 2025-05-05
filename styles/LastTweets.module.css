@@ -65,8 +65,13 @@
 }
 
 .allTweetsContainer {
-  width: 55vw;
+  height: 80vh;
+  width: 100%;
   margin-top: 2rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgb(21, 29, 38);
+  scrollbar-width: thin;
 }
 
 @media (max-width: 1024px) {
@@ -89,7 +94,6 @@
   }
 
   .allTweetsContainer {
-    width: 100%;
     padding: 0;
   }
 

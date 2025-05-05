@@ -9,6 +9,15 @@
   align-items: flex-start;
 }
 
+.oneTweetContainer {
+  padding: 1.3rem 2rem 1.3rem 2rem;
+  width: 100%;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  flex-direction:  column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
 .tweetInfo {
   display: flex;
   justify-content: flex-start;
