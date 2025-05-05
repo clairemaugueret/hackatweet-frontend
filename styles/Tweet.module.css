@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Goldman&display=swap");
+
+.oneTweetContainer {
+  padding: 1.3rem 2rem 1.3rem 2rem;
+  width: 100%;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  flex-direction:  column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.tweetInfo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.userPicture {
+  border-radius: 50%;
+}
+
+.tweetInfo h4 {
+  margin: 0 0 0 0.8rem;
+}
+
+.username {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: Verdana, sans-serif;
+  margin: 0 0 0 0.5rem;
+  padding: 0;
+}
+
+.tweetContent {
+  font-family: Verdana, sans-serif;
+  font-size: 0.8rem;
+  padding: 1rem 0 1rem 0;
+}
+
+.tweetContent a {
+  font-family: Verdana, sans-serif;
+  font-size: 0.8rem;
+  text-decoration: none;
+  font-weight: bold;
+  color: rgba(54, 144, 237, 1);
+}
+
+.tweetActions {
+  font-family: Verdana, sans-serif;
+  font-size: 0.8rem;
+}
+
+.tweetActions p {
+  font-family: Verdana, sans-serif;
+  font-size: 0.8rem;
+}
+
+.likeIcon {
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.deleteIcon {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .oneTweetContainer {
+    padding: 1rem;
+  }
+
+  .tweetInfo h4 {
+    font-size: 0.9rem;
+  }
+
+  .username {
+    font-size: 0.75rem;
+  }
+
+  .tweetContent,
+  .tweetContent a,
+  .tweetActions,
+  .tweetActions p,
+  .likeIcon,
+  .deleteIcon {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .oneTweetContainer {
+    padding: 0.8rem;
+  }
+
+  .tweetContent,
+  .tweetContent a,
+  .tweetActions,
+  .tweetActions p,
+  .likeIcon,
+  .deleteIcon {
+    font-size: 0.7rem;
+  }
+}

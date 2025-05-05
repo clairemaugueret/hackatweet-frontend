@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Goldman&display=swap");
+
+.trendsContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction:  column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.trendsContainer h3 {
+  margin-top: 0;
+}
+
+
+.hashtagListContainer {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction:  column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: Verdana, sans-serif;
+}
+
+.hashtagDisplay {
+  width: 100%;
+  display: flex;
+  flex-direction:  column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: rgba(255, 255, 255, 0.03);
+  transition: 0.2s;
+}
+
+.hashtagDisplay:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.first {
+  border-radius: 10px 10px 0% 0%;
+}
+
+.end {
+  border-radius: 0% 0% 10px 10px;
+}
+
+.hashtagDisplay h5 {
+  margin: 1rem 0 0.5rem 1rem;
+  padding: 0;
+}
+
+.hashtagDisplay p {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0 0 1rem 1rem;
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  .trendsContainer h3 {
+    padding-left: 1rem;
+  }
+
+  .hashtagListContainer {
+    width: 100%;
+  }
+
+  .hashtagDisplay h5,
+  .hashtagDisplay p {
+    margin-left: 1rem;
+    text-align: left;
+  }
+}
+
+@media (max-width: 600px) {
+  .hashtagDisplay h5 {
+    font-size: 0.75rem;
+  }
+
+  .hashtagDisplay p {
+    font-size: 0.65rem;
+  }
+}
