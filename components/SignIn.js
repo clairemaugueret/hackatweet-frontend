@@ -44,7 +44,7 @@ function SignInModal({
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ firstname: data.firstname, username, token: data.token }));
+          dispatch(login({ firstname: data.firstname, username, token: data.token, image: data.image }));
           setUsername("");
           setPassword("");
           router.push("/home");

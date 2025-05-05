@@ -7,6 +7,8 @@ import LastTweets from "./LastTweets";
 import Hashtag from "./Hashtag";
 import Trends from "./Trends";
 import Link from "next/link";
+import PictureProfileModal from "./ProfilePicture";
+import { useState } from "react";
 
 function Home() {
   const router = useRouter();
@@ -19,6 +21,21 @@ function Home() {
   const submitLogout = () => {
     dispatch(logout());
     router.push("/");
+  };
+
+  //PICTURE PROFILE MODAL
+  const [isPictureModalOpen, setIsPictureModalOpen] = useState(false);
+
+  const showictureProfileModal = () => {
+    setIsPictureModalOpen(true);
+  };
+
+  const handlePictureOk = () => {
+    setIsPictureModalOpen(false);
+  };
+
+  const handlePictureCancel = () => {
+    setIsPictureModalOpen(false);
   };
 
   return (
@@ -35,12 +52,19 @@ function Home() {
         </Link>
         <div>
           <div className={styles.userInfo}>
-            <Image
-              src="/user.jpg"
+            <img
+              src={user.image || "/user.jpg"}
               alt={user.username}
               width={45}
               height={45}
               className={styles.userPicture}
+              style={{ cursor: "pointer" }}
+              onClick={showictureProfileModal}
+            />
+            <PictureProfileModal
+              isPictureModalOpen={isPictureModalOpen}
+              handlePictureOk={handlePictureOk}
+              handlePictureCancel={handlePictureCancel}
             />
             <div>
               <h4>{user.firstname}</h4>
@@ -57,7 +81,11 @@ function Home() {
         </div>{" "}
       </div>
       <div className={styles.middleSection}>
-      {isHashtagPage && hashtag ? <Hashtag hashtag={hashtag} /> : <LastTweets />}
+        {isHashtagPage && hashtag ? (
+          <Hashtag hashtag={hashtag} />
+        ) : (
+          <LastTweets />
+        )}
       </div>
       <div className={styles.rightSection}>
         <Trends />

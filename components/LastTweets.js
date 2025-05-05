@@ -2,6 +2,7 @@ import Image from "next/image";
 import styles from "../styles/LastTweets.module.css";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useRef } from "react";
 import Tweet from "./Tweet";
 import { setTweets, setTrends } from "../reducers/tweets";
 
@@ -10,12 +11,14 @@ function LastTweets() {
   const [newTweet, setNewTweet] = useState("");
   const tweetsData = useSelector((state) => state.tweets.tweetsList);
   const user = useSelector((state) => state.users.value);
+  const textareaRef = useRef(null); // Référence au textarea
 
   const refreshData = () => {
     fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets")
       .then((response) => response.json())
       .then((data) => {
-        dispatch(setTweets(data.tweetsList));
+        const sortedTweets = data.tweetsList.sort((a, b) => new Date(b.date) - new Date(a.date));
+        dispatch(setTweets(sortedTweets));
       });
 
     fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends")
@@ -46,6 +49,19 @@ function LastTweets() {
           alert("Something went wrong... Try again.");
         }
       });
+  };
+
+  const handleTextareaChange = (e) => {
+    setNewTweet(e.target.value);
+    autoResizeTextarea();
+  };
+
+  const autoResizeTextarea = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto"; //
+      textarea.style.height = textarea.scrollHeight + "px"; //
+    }
   };
 
   //DELETE TWEET
@@ -90,6 +106,7 @@ function LastTweets() {
         hashtag={data.hashtag}
         firstname={data.author.firstname}
         username={data.author.username}
+        image={data.author.image}
         token={data.author.token}
         date={data.date}
         id={data._id}
@@ -107,11 +124,12 @@ function LastTweets() {
         <textarea
           type="text"
           id="newTweet"
-          onChange={(e) => setNewTweet(e.target.value)}
+          onChange={handleTextareaChange}
           value={newTweet}
           placeholder="What's up?"
           className={styles.inputNewTweet}
           maxLength={280}
+          ref={textareaRef}
         />
         <div className={styles.actionsContainer}>
           <p className={styles.newTweetCount}>

@@ -50,7 +50,7 @@ function SignUpModal({
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ firstname, username, token: data.token }));
+          dispatch(login({ firstname, username, token: data.token, image: data.image }));
           setFirstname("");
           setUsername("");
           setPassword("");

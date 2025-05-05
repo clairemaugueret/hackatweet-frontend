@@ -40,7 +40,8 @@ function Hashtag() {
     })
       .then((response) => response.json())
       .then((data) => {
-        dispatch(setHashtag(data.tweetsList));
+        const sortedTweets = data.tweetsList.sort((a, b) => new Date(b.date) - new Date(a.date));
+        dispatch(setHashtag(sortedTweets));
       });
 
     fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends")
@@ -100,6 +101,7 @@ function Hashtag() {
         hashtag={data.hashtag}
         firstname={data.author.firstname}
         username={data.author.username}
+        image={data.author.image}
         token={data.author.token}
         date={data.date}
         id={data._id}

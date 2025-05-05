@@ -18,12 +18,14 @@ function Trends() {
       } ${isLast ? styles.end : ""}`;
 
       return (
-        <div key={hashtag} className={classes}>
-          <Link href={`/hashtag/${hashtag.replace(/^#/, "")}`}><h5>#{hashtag}</h5></Link>
-          <p>
-            {count} Tweet{count > 1 ? "s" : ""}
-          </p>
-        </div>
+        <Link href={`/hashtag/${hashtag.replace(/^#/, "")}`}>
+          <div key={hashtag} className={classes}>
+            <h5>#{hashtag}</h5>
+            <p>
+              {count} Tweet{count > 1 ? "s" : ""}
+            </p>
+          </div>
+        </Link>
       );
     }
   );

@@ -6,6 +6,7 @@ const initialState = {
         username: '',
         token: '',
         isConnected: false,
+        image: '',
     }
 };
 
@@ -19,6 +20,7 @@ export const usersSlice = createSlice({
           username: action.payload.username,
           token: action.payload.token,
           isConnected: true,
+          image: action.payload.image, 
         });
       },
       logout: (state) => {
@@ -27,10 +29,16 @@ export const usersSlice = createSlice({
           username: '',
           token: '',
           isConnected: false,
+          image: '',
         });
-      }
+      },
+      setPictureProfile: (state, action) => {
+        Object.assign(state.value, {
+          image: action.payload.image,
+        });
+      },
     }
   });
 
-export const { login, logout } = usersSlice.actions;
+export const { login, logout, setPictureProfile } = usersSlice.actions;
 export default usersSlice.reducer

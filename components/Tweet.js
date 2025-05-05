@@ -74,8 +74,8 @@ function Tweet(props) {
   return (
     <div className={styles.oneTweetContainer}>
       <div className={styles.tweetInfo}>
-        <Image
-          src="/user.jpg"
+        <img
+          src={props.image || "/user.jpg"}
           alt={props.username}
           width={40}
           height={40}
