@@ -8,7 +8,10 @@ import Hashtag from "./Hashtag";
 import Trends from "./Trends";
 import Link from "next/link";
 import PictureProfileModal from "./ProfilePicture";
+import FirstnameModal from "./Firstname";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 function Home() {
   const router = useRouter();
@@ -26,16 +29,14 @@ function Home() {
   //PICTURE PROFILE MODAL
   const [isPictureModalOpen, setIsPictureModalOpen] = useState(false);
 
-  const showictureProfileModal = () => {
+  const showPictureProfileModal = () => {
     setIsPictureModalOpen(true);
   };
 
-  const handlePictureOk = () => {
-    setIsPictureModalOpen(false);
-  };
+  const [isFirstnameModalOpen, setIsFirstnameModalOpen] = useState(false);
 
-  const handlePictureCancel = () => {
-    setIsPictureModalOpen(false);
+  const showFirstnameModal = () => {
+    setIsFirstnameModalOpen(true);
   };
 
   return (
@@ -52,22 +53,39 @@ function Home() {
         </Link>
         <div>
           <div className={styles.userInfo}>
-            <img
-              src={user.image || "/user.jpg"}
-              alt={user.username}
-              width={45}
-              height={45}
-              className={styles.userPicture}
-              style={{ cursor: "pointer" }}
-              onClick={showictureProfileModal}
-            />
-            <PictureProfileModal
-              isPictureModalOpen={isPictureModalOpen}
-              handlePictureOk={handlePictureOk}
-              handlePictureCancel={handlePictureCancel}
-            />
+            <div className={styles.pictureWrapper}>
+              <img
+                src={user.image || "/user.jpg"}
+                alt={user.username}
+                width={45}
+                height={45}
+                className={styles.userPicture}
+                style={{ cursor: "pointer" }}
+                onClick={showPictureProfileModal}
+              />
+              <PictureProfileModal
+                isPictureModalOpen={isPictureModalOpen}
+                setIsPictureModalOpen={setIsPictureModalOpen}
+              />
+              <span className={styles.editIcon}>
+                <FontAwesomeIcon
+                  icon={faPen}
+                  onClick={showPictureProfileModal}
+                />
+              </span>
+            </div>
             <div>
-              <h4>{user.firstname}</h4>
+              <div className={styles.firstnameWrapper}>
+                <h4 onClick={showFirstnameModal}>{user.firstname}</h4>
+
+                <FirstnameModal
+                  isFirstnameModalOpen={isFirstnameModalOpen}
+                  setIsFirstnameModalOpen={setIsFirstnameModalOpen}
+                />
+                <span className={styles.editIconFirstname}>
+                  <FontAwesomeIcon icon={faPen} onClick={showFirstnameModal} />
+                </span>
+              </div>
               <p className={styles.username}>@{user.username}</p>
             </div>
           </div>

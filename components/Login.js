@@ -3,8 +3,19 @@ import styles from "../styles/Login.module.css";
 import { useState } from "react";
 import SignUpModal from "./SignUp";
 import SignInModal from "./SignIn";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 function Login() {
+  const router = useRouter();
+  const user = useSelector((state) => state.users.value);
+  useEffect(() => {
+    if (user.isConnected) {
+      router.push("/home");
+    }
+  }, []);
+
   //SIGNUP MODAL
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
@@ -18,23 +29,22 @@ function Login() {
 
   const handleSignUpCancel = () => {
     setIsSignUpModalOpen(false);
- };
+  };
 
+  //SIGNIN MODAL
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 
-    //SIGNIN MODAL
-    const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const showSignInModal = () => {
+    setIsSignInModalOpen(true);
+  };
 
-    const showSignInModal = () => {
-      setIsSignInModalOpen(true);
-    };
-  
-    const handleSignInOk = () => {
-      setIsSignInModalOpen(false);
-    };
-  
-    const handleSignInCancel = () => {
-      setIsSignInModalOpen(false);
-    };
+  const handleSignInOk = () => {
+    setIsSignInModalOpen(false);
+  };
+
+  const handleSignInCancel = () => {
+    setIsSignInModalOpen(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -58,7 +68,11 @@ function Login() {
           handleSignUpCancel={handleSignUpCancel}
         />
         <p>Already have an account?</p>
-        <button className={styles.signinBtn} id="signin" onClick={showSignInModal}>
+        <button
+          className={styles.signinBtn}
+          id="signin"
+          onClick={showSignInModal}
+        >
           Sign in
         </button>
         <SignInModal

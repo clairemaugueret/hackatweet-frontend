@@ -4,7 +4,7 @@
   height: 100%;
   width: 100%;
   display: flex;
-  flex-direction:  column;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 }
@@ -13,21 +13,23 @@
   margin-top: 0;
 }
 
-
 .hashtagListContainer {
   width: 100%;
-  height: 90%;
+  height: 100%;
   display: flex;
-  flex-direction:  column;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   font-family: Verdana, sans-serif;
+  overflow-y: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgb(21, 29, 38);
+  scrollbar-width: thin;
 }
 
 .hashtagDisplay {
   width: 100%;
   display: flex;
-  flex-direction:  column;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   background-color: rgba(255, 255, 255, 0.03);

@@ -7,11 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setPictureProfile } from "../reducers/users";
 import { useRouter } from "next/router";
 
-function PictureProfileModal({
-  isPictureModalOpen,
-  handlePictureOk,
-  handlePictureCancel,
-}) {
+function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [image, setImage] = useState(null);
@@ -55,8 +51,7 @@ function PictureProfileModal({
   return (
     <Modal
       open={isPictureModalOpen}
-      onOk={handlePictureOk}
-      onCancel={handlePictureCancel}
+      onCancel={() => setIsPictureModalOpen(false)}
       footer={[
         <Button
           key="Picture"
