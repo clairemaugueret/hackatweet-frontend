@@ -9,7 +9,7 @@ import Trends from "./Trends";
 import Link from "next/link";
 import PictureProfileModal from "./ProfilePicture";
 import FirstnameModal from "./Firstname";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,6 +21,13 @@ function Home() {
   const hashtag = router.query.hashtag;
   const isHashtagPage = router.pathname.includes("/hashtag");
 
+  //REFRESH TWEETS QUAND CHANGEMENT PICTURE PROFILE ET FIRSTNAME
+  const [refreshTweets, setRefreshTweets] = useState(false);
+  useEffect(() => {
+    setRefreshTweets((prev) => !prev);
+  }, [user.firstname, user.image]);
+
+  //LOGOUT
   const submitLogout = () => {
     dispatch(logout());
     router.push("/");
@@ -33,6 +40,7 @@ function Home() {
     setIsPictureModalOpen(true);
   };
 
+  //PICTURE FIRSTNAME MODAL
   const [isFirstnameModalOpen, setIsFirstnameModalOpen] = useState(false);
 
   const showFirstnameModal = () => {
@@ -100,9 +108,9 @@ function Home() {
       </div>
       <div className={styles.middleSection}>
         {isHashtagPage && hashtag ? (
-          <Hashtag hashtag={hashtag} />
+          <Hashtag hashtag={hashtag} refreshTrigger={refreshTweets} />
         ) : (
-          <LastTweets />
+          <LastTweets refreshTrigger={refreshTweets} />
         )}
       </div>
       <div className={styles.rightSection}>

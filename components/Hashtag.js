@@ -6,18 +6,22 @@ import Tweet from "./Tweet";
 import { setTrends, setHashtag } from "../reducers/tweets";
 import { useRouter } from "next/router";
 
-function Hashtag() {
+function Hashtag({ refreshTrigger }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.value);
-  const hashtagData = useSelector((state) => state.tweets.hashgtagTweetsList);
+  const hashtagData = useSelector((state) => state.tweets.hashtagTweetsList);
 
   const [hashtagSearched, setHashtagSearched] = useState("");
 
-  // UPDATE hashtagSearched quand URL change (suite action clic sur Trends)
+  // UPDATE hashtagSearched quand URL change (suite action clic sur Trends) ou changement picture/firstname
   useEffect(() => {
-    setHashtagSearched("#" + router.query.hashtag);
-  }, [router.query.hashtag]);
+    if (router.query.hashtag) {
+      const formatted = "#" + router.query.hashtag;
+      setHashtagSearched(formatted);
+      refreshData(formatted);
+    }
+  }, [router.query.hashtag, refreshTrigger]);
 
   //UPDATE de l'URL quand hashtagSearched change (suite action recherche)
   const handleInputChange = (e) => {
@@ -32,44 +36,53 @@ function Hashtag() {
 
   //FETCH POUR AFFICHAGE
   const refreshData = (hashtag) => {
-    const cleanedHashtag = hashtag.startsWith('#') ? hashtag.slice(1) : hashtag;
+    const cleanedHashtag = hashtag.startsWith("#") ? hashtag.slice(1) : hashtag;
 
-    fetch(`https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends/${cleanedHashtag}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    })
+    fetch(
+      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends/${cleanedHashtag}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
-        const sortedTweets = data.tweetsList.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const sortedTweets = data.tweetsList.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
         dispatch(setHashtag(sortedTweets));
       });
 
-    fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends")
+    fetch(
+      "https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends"
+    )
       .then((response) => response.json())
       .then((data) => {
         dispatch(setTrends(data.hashtagList));
       });
   };
 
-    // AFFICHAGE tweets quand hashtagSearched change
-    useEffect(() => {
-      if (hashtagSearched.trim() === "") return;
-  
-      const timeoutId = setTimeout(() => {
-        refreshData(hashtagSearched);
-      }, 500);
-  
-      return () => clearTimeout(timeoutId);
-    }, [hashtagSearched, dispatch]);
-    
+  // AFFICHAGE tweets quand hashtagSearched change
+  useEffect(() => {
+    if (hashtagSearched.trim() === "") return;
+
+    const timeoutId = setTimeout(() => {
+      refreshData(hashtagSearched);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [hashtagSearched, dispatch]);
 
   //DELETE TWEET
   const deleteTweet = (id) => {
-    fetch(`https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/delete/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token }),
-    })
+    fetch(
+      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: user.token }),
+      }
+    )
       .then((response) => response.json())
       .then(() => {
         refreshData(hashtagSearched);
@@ -78,11 +91,14 @@ function Hashtag() {
 
   //LIKE TWEET
   const likeTweet = (id) => {
-    fetch(`https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/liked/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token }),
-    })
+    fetch(
+      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/liked/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: user.token }),
+      }
+    )
       .then((response) => response.json())
       .then(() => {
         refreshData(hashtagSearched);

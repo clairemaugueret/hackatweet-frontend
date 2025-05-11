@@ -6,7 +6,7 @@ import { useRef } from "react";
 import Tweet from "./Tweet";
 import { setTweets, setTrends } from "../reducers/tweets";
 
-function LastTweets() {
+function LastTweets({ refreshTrigger }) {
   const dispatch = useDispatch();
   const [newTweet, setNewTweet] = useState("");
   const tweetsData = useSelector((state) => state.tweets.tweetsList);
@@ -14,14 +14,20 @@ function LastTweets() {
   const textareaRef = useRef(null); // Référence au textarea
 
   const refreshData = () => {
-    fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets")
+    fetch(
+      "https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets"
+    )
       .then((response) => response.json())
       .then((data) => {
-        const sortedTweets = data.tweetsList.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const sortedTweets = data.tweetsList.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
         dispatch(setTweets(sortedTweets));
       });
 
-    fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends")
+    fetch(
+      "https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends"
+    )
       .then((response) => response.json())
       .then((data) => {
         dispatch(setTrends(data.hashtagList));
@@ -35,11 +41,14 @@ function LastTweets() {
       return;
     }
 
-    fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/new", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token, content: newTweet }),
-    })
+    fetch(
+      "https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/new",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: user.token, content: newTweet }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
@@ -66,11 +75,14 @@ function LastTweets() {
 
   //DELETE TWEET
   const deleteTweet = (id) => {
-    fetch(`https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/delete/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token }),
-    })
+    fetch(
+      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: user.token }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         refreshData();
@@ -79,11 +91,14 @@ function LastTweets() {
 
   //LIKE TWEET
   const likeTweet = (id) => {
-    fetch(`https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/liked/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token }),
-    })
+    fetch(
+      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/liked/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: user.token }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         refreshData();
@@ -93,7 +108,7 @@ function LastTweets() {
   //AFFICHAGE INITIAL DES TWEETS
   useEffect(() => {
     refreshData();
-  }, []);
+  }, [refreshTrigger]);
 
   const tweets = tweetsData.map((data, i) => {
     const userLiked = data.isLiked.some((like) => like.token === user.token);

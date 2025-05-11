@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   tweetsList: [],
   trendsList: [],
-  hashgtagTweetsList: [],
+  hashtagTweetsList: [],
 };
 
 export const tweetsSlice = createSlice({
@@ -17,7 +17,7 @@ export const tweetsSlice = createSlice({
       state.trendsList = action.payload.sort();
     },
     setHashtag: (state, action) => {
-      state.hashgtagTweetsList = action.payload;
+      state.hashtagTweetsList = action.payload;
     },
   },
 });

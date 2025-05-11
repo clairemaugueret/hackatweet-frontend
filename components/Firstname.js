@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [newFirstname, setNewFirstname] = useState(null);
+  const [newFirstname, setNewFirstname] = useState("");
   const user = useSelector((state) => state.users.value);
 
   const modalStyles = {
@@ -21,7 +21,7 @@ function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
 
   useEffect(() => {
     if (!isFirstnameModalOpen) {
-      setNewFirstname(null);
+      setNewFirstname("");
     }
   }, [isFirstnameModalOpen]);
 
@@ -36,15 +36,15 @@ function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: user.token, newFirstname }),
+        body: JSON.stringify({ token: user.token, firstname: newFirstname }),
       }
     )
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(setFirstname({ newFirstname }));
+          dispatch(setFirstname({ firstname: newFirstname }));
           setNewFirstname("");
-          router.push("/home");
+          setIsFirstnameModalOpen(false);
         } else {
           alert("Something went wrong... Try again.");
         }

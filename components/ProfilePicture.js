@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const user = useSelector((state) => state.users.value);
 
   const modalStyles = {
@@ -21,7 +21,7 @@ function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
 
   useEffect(() => {
     if (!isPictureModalOpen) {
-      setImage(null);
+      setImage("");
     }
   }, [isPictureModalOpen]);
 
@@ -41,7 +41,7 @@ function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
         if (data.result) {
           dispatch(setPictureProfile({ image }));
           setImage("");
-          router.push("/home");
+          setIsPictureModalOpen(false);
         } else {
           alert("Something went wrong... Try again.");
         }
