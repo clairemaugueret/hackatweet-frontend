@@ -4,15 +4,16 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "../styles/Signin.module.css";
 import { useDispatch } from "react-redux";
-import { login } from '../reducers/users';
-import { useRouter } from 'next/router';
+import { login } from "../reducers/users";
+import { useRouter } from "next/router";
+import BACKEND_URL from "../utils/config";
 
 function SignInModal({
   isSignInModalOpen,
   handleSignInOk,
   handleSignInCancel,
 }) {
-  const router = useRouter()
+  const router = useRouter();
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -36,7 +37,7 @@ function SignInModal({
       return;
     }
 
-    fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/users/signin", {
+    fetch(`${BACKEND_URL}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -44,7 +45,14 @@ function SignInModal({
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ firstname: data.firstname, username, token: data.token, image: data.image }));
+          dispatch(
+            login({
+              firstname: data.firstname,
+              username,
+              token: data.token,
+              image: data.image,
+            })
+          );
           setUsername("");
           setPassword("");
           router.push("/home");

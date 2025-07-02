@@ -4,15 +4,16 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "../styles/Signup.module.css";
 import { useDispatch } from "react-redux";
-import { login } from '../reducers/users';
-import { useRouter } from 'next/router';
+import { login } from "../reducers/users";
+import { useRouter } from "next/router";
+import BACKEND_URL from "../utils/config";
 
 function SignUpModal({
   isSignUpModalOpen,
   handleSignUpOk,
   handleSignUpCancel,
 }) {
-  const router = useRouter()
+  const router = useRouter();
   const dispatch = useDispatch();
   const [firstname, setFirstname] = useState(null);
   const [username, setUsername] = useState(null);
@@ -33,16 +34,12 @@ function SignUpModal({
   }, [isSignUpModalOpen]);
 
   const submitSignUp = () => {
-    if (
-      !firstname?.trim() ||
-      !username?.trim() ||
-      !password?.trim()
-    ) {
+    if (!firstname?.trim() || !username?.trim() || !password?.trim()) {
       alert("All fields are mandatory.");
       return;
     }
 
-    fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/users/signup", {
+    fetch(`${BACKEND_URL}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstname, username, password }),
@@ -50,11 +47,13 @@ function SignUpModal({
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ firstname, username, token: data.token, image: data.image }));
+          dispatch(
+            login({ firstname, username, token: data.token, image: data.image })
+          );
           setFirstname("");
           setUsername("");
           setPassword("");
-          router.push('/home')
+          router.push("/home");
         } else {
           alert("Something went wrong... Try again.");
         }

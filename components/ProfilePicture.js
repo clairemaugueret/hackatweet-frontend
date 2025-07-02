@@ -6,6 +6,7 @@ import styles from "../styles/PictureProfile.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setPictureProfile } from "../reducers/users";
 import { useRouter } from "next/router";
+import BACKEND_URL from "../utils/config";
 
 function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
       return;
     }
 
-    fetch("https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/users/picture", {
+    fetch(`${BACKEND_URL}/users/picture`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token: user.token, image }),

@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setFirstname } from "../reducers/users";
 import { useRouter } from "next/router";
 
+import BACKEND_URL from "../utils/config";
+
 function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -32,7 +34,7 @@ function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
     }
 
     fetch(
-      "https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/users/firstname",
+      `${BACKEND_URL}/users/firstname`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

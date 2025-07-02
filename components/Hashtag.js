@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Tweet from "./Tweet";
 import { setTrends, setHashtag } from "../reducers/tweets";
 import { useRouter } from "next/router";
+import BACKEND_URL from "../utils/config";
 
 function Hashtag({ refreshTrigger }) {
   const router = useRouter();
@@ -38,13 +39,7 @@ function Hashtag({ refreshTrigger }) {
   const refreshData = (hashtag) => {
     const cleanedHashtag = hashtag.startsWith("#") ? hashtag.slice(1) : hashtag;
 
-    fetch(
-      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends/${cleanedHashtag}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      }
-    )
+    fetch(`${BACKEND_URL}/tweets/trends/${cleanedHashtag}`)
       .then((response) => response.json())
       .then((data) => {
         const sortedTweets = data.tweetsList.sort(
@@ -53,9 +48,7 @@ function Hashtag({ refreshTrigger }) {
         dispatch(setHashtag(sortedTweets));
       });
 
-    fetch(
-      "https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/trends"
-    )
+    fetch(`${BACKEND_URL}/tweets/trends`)
       .then((response) => response.json())
       .then((data) => {
         dispatch(setTrends(data.hashtagList));
@@ -75,14 +68,11 @@ function Hashtag({ refreshTrigger }) {
 
   //DELETE TWEET
   const deleteTweet = (id) => {
-    fetch(
-      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/delete/${id}`,
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: user.token }),
-      }
-    )
+    fetch(`${BACKEND_URL}/tweets/delete/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: user.token }),
+    })
       .then((response) => response.json())
       .then(() => {
         refreshData(hashtagSearched);
@@ -91,14 +81,11 @@ function Hashtag({ refreshTrigger }) {
 
   //LIKE TWEET
   const likeTweet = (id) => {
-    fetch(
-      `https://hackatweet-backend-git-main-clairemgts-projects.vercel.app/tweets/liked/${id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: user.token }),
-      }
-    )
+    fetch(`${BACKEND_URL}/tweets/liked/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: user.token }),
+    })
       .then((response) => response.json())
       .then(() => {
         refreshData(hashtagSearched);
