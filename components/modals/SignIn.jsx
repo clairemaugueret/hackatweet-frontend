@@ -6,7 +6,7 @@ import styles from "../../styles/Modal.module.css";
 import { useDispatch } from "react-redux";
 import { login } from "../../reducers/users";
 import { useRouter } from "next/router";
-import BACKEND_URL from "../../utils/config";
+import { signIn } from "../../services/userAPI";
 
 function SignInModal({
   isSignInModalOpen,
@@ -31,36 +31,22 @@ function SignInModal({
     }
   }, [isSignInModalOpen]);
 
-  const submitSignIn = () => {
-    if (!username?.trim() || !password?.trim()) {
-      alert("All fields are mandatory.");
-      return;
-    }
+const submitSignIn = async () => {
+  if (!username?.trim() || !password?.trim()) {
+    alert("All fields are mandatory.");
+    return;
+  }
 
-    fetch(`${BACKEND_URL}/users/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(
-            login({
-              firstname: data.firstname,
-              username,
-              token: data.token,
-              image: data.image,
-            })
-          );
-          setUsername("");
-          setPassword("");
-          router.push("/home");
-        } else {
-          alert("Something went wrong... Try again.");
-        }
-      });
-  };
+  const data = await signIn(username, password);
+  if (data.result) {
+    dispatch(login({ firstname: data.firstname, username, token: data.token, image: data.image }));
+    setUsername("");
+    setPassword("");
+    router.push("/home");
+  } else {
+    alert("Something went wrong... Try again.");
+  }
+};
 
   return (
     <Modal

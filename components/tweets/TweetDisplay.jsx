@@ -1,40 +1,14 @@
-import Image from "next/image";
-import styles from "../styles/Tweet.module.css";
+import styles from "../../styles/Tweet.module.css";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { useRelativeTime } from "../../hooks/useRelativeTime";
 
 function Tweet(props) {
   const user = useSelector((state) => state.users.value);
-  const [time, setTime] = useState("");
-
-  //TWEET TIME
-  const calculateTime = () => {
-    const diffHours = (new Date() - new Date(props.date)) / 36e5;
-
-    if (diffHours < 0.02) {
-      return "a few seconds";
-    } else if (diffHours < 1) {
-      return Math.floor(diffHours * 60) + " minutes";
-    } else if (diffHours < 24) {
-      return Math.floor(diffHours) + " hours";
-    } else {
-      const diffDays = Math.floor(diffHours / 24);
-      return diffDays === 1 ? "1 day" : `${diffDays} days`;
-    }
-  };
-
-  useEffect(() => {
-    setTime(calculateTime());
-
-    const interval = setInterval(() => {
-      setTime(calculateTime());
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [props.date]);
+  const time = useRelativeTime(props.date);
 
   //DELETE TWEET
   const handleDelete = () => {

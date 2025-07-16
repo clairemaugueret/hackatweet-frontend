@@ -1,11 +1,15 @@
-import Image from "next/image";
-import styles from "../styles/Hashtag.module.css";
+import styles from "../../styles/MiddleSection.module.css";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Tweet from "./Tweet";
-import { setTrends, setHashtag } from "../reducers/tweets";
+import { setTrends, setHashtag } from "../../reducers/tweets";
 import { useRouter } from "next/router";
-import BACKEND_URL from "../utils/config";
+import {
+  fetchTweetsByHashtag,
+  fetchTrends,
+  deleteTweet as deleteTweetAPI,
+  likeTweet as likeTweetAPI,
+} from "../../services/tweetAPI";
+import TweetList from "../tweets/TweetList";
 
 function Hashtag({ refreshTrigger }) {
   const router = useRouter();
@@ -36,20 +40,14 @@ function Hashtag({ refreshTrigger }) {
   };
 
   //FETCH POUR AFFICHAGE
-  const refreshData = (hashtag) => {
+  const refreshData = async (hashtag) => {
     const cleanedHashtag = hashtag.startsWith("#") ? hashtag.slice(1) : hashtag;
 
-    fetch(`${BACKEND_URL}/tweets/trends/${cleanedHashtag}`)
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(setHashtag(data.tweetsList));
-      });
+    const hashtagRes = await fetchTweetsByHashtag(cleanedHashtag);
+    dispatch(setHashtag(hashtagRes.tweetsList));
 
-    fetch(`${BACKEND_URL}/tweets/trends`)
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(setTrends(data.hashtagList));
-      });
+    const trendsRes = await fetchTrends();
+    dispatch(setTrends(trendsRes.hashtagList));
   };
 
   // AFFICHAGE tweets quand hashtagSearched change
@@ -64,53 +62,16 @@ function Hashtag({ refreshTrigger }) {
   }, [hashtagSearched, dispatch]);
 
   //DELETE TWEET
-  const deleteTweet = (id) => {
-    fetch(`${BACKEND_URL}/tweets/delete/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token }),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        refreshData(hashtagSearched);
-      });
+  const handleDeleteTweet = async (id) => {
+    await deleteTweetAPI(id, user.token);
+    refreshData(hashtagSearched);
   };
 
   //LIKE TWEET
-  const likeTweet = (id) => {
-    fetch(`${BACKEND_URL}/tweets/liked/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token }),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        refreshData(hashtagSearched);
-      });
+  const handleLikeTweet = async (id) => {
+    await likeTweetAPI(id, user.token);
+    refreshData(hashtagSearched);
   };
-
-  //MAP POUR AFFICHAGE
-  const tweets = hashtagData?.map((data, i) => {
-    const userLiked = data.isLiked.some((like) => like.token === user.token);
-
-    return (
-      <Tweet
-        key={i}
-        content={data.content}
-        isLiked={data.isLiked}
-        hashtag={data.hashtag}
-        firstname={data.author.firstname}
-        username={data.author.username}
-        image={data.author.image}
-        token={data.author.token}
-        date={data.date}
-        id={data._id}
-        deleteTweet={deleteTweet}
-        likeTweet={likeTweet}
-        userLiked={userLiked}
-      />
-    );
-  });
 
   return (
     <div className={styles.container}>
@@ -125,14 +86,19 @@ function Hashtag({ refreshTrigger }) {
           value={hashtagSearched}
         />
       </div>
-      <div className={styles.hashtagContainer}>
+      <div style={{ width: "100%" }}>
         {hashtagData?.length === 0 && hashtagSearched.trim() !== "" && (
           <p className={styles.noTweetMessage}>
             No tweets found with{" "}
             <strong>#{hashtagSearched.replace(/^#/, "")}</strong>
           </p>
         )}
-        {tweets}
+        <TweetList
+          tweets={hashtagData}
+          currentUser={user}
+          onDelete={handleDeleteTweet}
+          onLike={handleLikeTweet}
+        />
       </div>
     </div>
   );

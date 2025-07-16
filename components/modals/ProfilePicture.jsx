@@ -5,12 +5,10 @@ import Image from "next/image";
 import styles from "../../styles/Modal.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setPictureProfile } from "../../reducers/users";
-import { useRouter } from "next/router";
-import BACKEND_URL from "../../utils/config";
+import { updateProfilePicture } from "../../services/userAPI";
 
 function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
   const dispatch = useDispatch();
-  const router = useRouter();
   const [image, setImage] = useState("");
   const user = useSelector((state) => state.users.value);
 
@@ -26,28 +24,21 @@ function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
     }
   }, [isPictureModalOpen]);
 
-  const submitPicture = () => {
+const submitPicture = async () => {
     if (!image?.trim()) {
       alert("Fill up the field with an url or cancel the change.");
       return;
     }
 
-    fetch(`${BACKEND_URL}/users/picture`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token, image }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(setPictureProfile({ image }));
-          setImage("");
-          setIsPictureModalOpen(false);
-        } else {
-          alert("Something went wrong... Try again.");
-        }
-      });
-  };
+  const data = await updateProfilePicture(user.token, image);
+  if (data.result) {
+    dispatch(setPictureProfile({ image }));
+    setImage("");
+    setIsPictureModalOpen(false);
+  } else {
+    alert("Something went wrong... Try again.");
+  }
+};
 
   return (
     <Modal

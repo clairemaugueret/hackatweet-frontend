@@ -5,13 +5,10 @@ import Image from "next/image";
 import styles from "../../styles/Modal.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setFirstname } from "../../reducers/users";
-import { useRouter } from "next/router";
-
-import BACKEND_URL from "../../utils/config";
+import { updateFirstname } from "../../services/userAPI";
 
 function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
   const dispatch = useDispatch();
-  const router = useRouter();
   const [newFirstname, setNewFirstname] = useState("");
   const user = useSelector((state) => state.users.value);
 
@@ -27,28 +24,21 @@ function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
     }
   }, [isFirstnameModalOpen]);
 
-  const submitFirstname = () => {
-    if (!newFirstname?.trim()) {
-      alert("Fill up the field with an url or cancel the change.");
-      return;
-    }
+const submitFirstname = async () => {
+  if (!newFirstname?.trim()) {
+    alert("Fill up the field or cancel.");
+    return;
+  }
 
-    fetch(`${BACKEND_URL}/users/firstname`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: user.token, firstname: newFirstname }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(setFirstname({ firstname: newFirstname }));
-          setNewFirstname("");
-          setIsFirstnameModalOpen(false);
-        } else {
-          alert("Something went wrong... Try again.");
-        }
-      });
-  };
+  const data = await updateFirstname(user.token, newFirstname);
+  if (data.result) {
+    dispatch(setFirstname({ firstname: newFirstname }));
+    setNewFirstname("");
+    setIsFirstnameModalOpen(false);
+  } else {
+    alert("Something went wrong... Try again.");
+  }
+};
 
   return (
     <Modal

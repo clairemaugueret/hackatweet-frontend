@@ -1,4 +1,4 @@
-import styles from "../styles/Trends.module.css";
+import styles from "../../styles/Trends.module.css";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 
