@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Goldman&display=swap");
 
-.PictureModal {
+.modal {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,7 +10,7 @@
   text-align: center;
 }
 
-.PictureBtnModal {
+.modalBtn {
   width: 11rem;
   font-family: "Mount Heavy", Verdana, sans-serif;
   font-size: 0.7rem;
@@ -22,7 +22,7 @@
   margin: 10px auto;
 }
 
-.inputPicture {
+.modalInput {
   font-family: Verdana, sans-serif;
   background-color: rgb(21, 29, 38);
   border: 1px solid rgba(255, 255, 255, 0.1);

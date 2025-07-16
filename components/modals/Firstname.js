@@ -2,12 +2,12 @@ import { Button, Modal } from "antd";
 import React from "react";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "../styles/Firstname.module.css";
+import styles from "../../styles/Modal.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setFirstname } from "../reducers/users";
+import { setFirstname } from "../../reducers/users";
 import { useRouter } from "next/router";
 
-import BACKEND_URL from "../utils/config";
+import BACKEND_URL from "../../utils/config";
 
 function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
   const dispatch = useDispatch();
@@ -33,14 +33,11 @@ function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
       return;
     }
 
-    fetch(
-      `${BACKEND_URL}/users/firstname`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: user.token, firstname: newFirstname }),
-      }
-    )
+    fetch(`${BACKEND_URL}/users/firstname`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: user.token, firstname: newFirstname }),
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
@@ -61,12 +58,12 @@ function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
         <Button
           key="Firstname"
           onClick={submitFirstname}
-          className={styles.FirstnameBtnModal}
+          className={styles.modalBtn}
         >
           Change your firstname
         </Button>,
       ]}
-      className={styles.FirstnameModal}
+      className={styles.modal}
       styles={modalStyles}
     >
       <Image src="/logo.png" alt="Logo" width={50} height={50} />
@@ -77,7 +74,7 @@ function FirstnameModal({ isFirstnameModalOpen, setIsFirstnameModalOpen }) {
         onChange={(e) => setNewFirstname(e.target.value)}
         value={newFirstname}
         placeholder="Enter new firstname"
-        className={styles.inputFirstname}
+        className={styles.modalInput}
       />
     </Modal>
   );

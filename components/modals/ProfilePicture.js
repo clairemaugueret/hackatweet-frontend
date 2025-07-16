@@ -2,11 +2,11 @@ import { Button, Modal } from "antd";
 import React from "react";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "../styles/PictureProfile.module.css";
+import styles from "../../styles/Modal.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setPictureProfile } from "../reducers/users";
+import { setPictureProfile } from "../../reducers/users";
 import { useRouter } from "next/router";
-import BACKEND_URL from "../utils/config";
+import BACKEND_URL from "../../utils/config";
 
 function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
   const dispatch = useDispatch();
@@ -57,12 +57,12 @@ function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
         <Button
           key="Picture"
           onClick={submitPicture}
-          className={styles.PictureBtnModal}
+          className={styles.modalBtn}
         >
           Change my profile picture
         </Button>,
       ]}
-      className={styles.PictureModal}
+      className={styles.modal}
       styles={modalStyles}
     >
       <Image src="/logo.png" alt="Logo" width={50} height={50} />
@@ -73,7 +73,7 @@ function PictureProfileModal({ isPictureModalOpen, setIsPictureModalOpen }) {
         onChange={(e) => setImage(e.target.value)}
         value={image}
         placeholder="Enter an external url"
-        className={styles.inputPicture}
+        className={styles.modalInput}
       />
     </Modal>
   );

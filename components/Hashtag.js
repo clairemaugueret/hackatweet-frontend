@@ -31,7 +31,7 @@ function Hashtag({ refreshTrigger }) {
 
     const cleaned = value.replace(/^#/, "");
     if (cleaned.trim() !== "") {
-      router.push(`/hashtag/${cleaned}`, undefined, { shallow: true });
+      router.push(`/trends/${cleaned}`, undefined, { shallow: true });
     }
   };
 
@@ -42,10 +42,7 @@ function Hashtag({ refreshTrigger }) {
     fetch(`${BACKEND_URL}/tweets/trends/${cleanedHashtag}`)
       .then((response) => response.json())
       .then((data) => {
-        const sortedTweets = data.tweetsList.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
-        dispatch(setHashtag(sortedTweets));
+        dispatch(setHashtag(data.tweetsList));
       });
 
     fetch(`${BACKEND_URL}/tweets/trends`)

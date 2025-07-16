@@ -1,8 +1,8 @@
 import Image from "next/image";
 import styles from "../styles/Login.module.css";
 import { useState } from "react";
-import SignUpModal from "./SignUp";
-import SignInModal from "./SignIn";
+import SignUpModal from "./modals/SignUp";
+import SignInModal from "./modals/SignIn";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";

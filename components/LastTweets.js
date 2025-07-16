@@ -18,10 +18,7 @@ function LastTweets({ refreshTrigger }) {
     fetch(`${BACKEND_URL}/tweets`)
       .then((response) => response.json())
       .then((data) => {
-        const sortedTweets = data.tweetsList.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
-        dispatch(setTweets(sortedTweets));
+        dispatch(setTweets(data.tweetsList));
       });
 
     fetch(`${BACKEND_URL}/tweets/trends`)

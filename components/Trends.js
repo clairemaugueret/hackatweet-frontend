@@ -18,7 +18,7 @@ function Trends() {
       } ${isLast ? styles.end : ""}`;
 
       return (
-        <Link href={`/hashtag/${hashtag.replace(/^#/, "")}`}>
+        <Link href={`/trends/${hashtag.replace(/^#/, "")}`}>
           <div key={hashtag} className={classes}>
             <h5>#{hashtag}</h5>
             <p>

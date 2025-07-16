@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import Link from 'next/link';
+import Link from "next/link";
 
 function Tweet(props) {
   const user = useSelector((state) => state.users.value);
@@ -13,7 +13,7 @@ function Tweet(props) {
   //TWEET TIME
   const calculateTime = () => {
     const diffHours = (new Date() - new Date(props.date)) / 36e5;
-  
+
     if (diffHours < 0.02) {
       return "a few seconds";
     } else if (diffHours < 1) {
@@ -28,12 +28,12 @@ function Tweet(props) {
 
   useEffect(() => {
     setTime(calculateTime());
-  
+
     const interval = setInterval(() => {
       setTime(calculateTime());
     }, 5000);
-  
-    return () => clearInterval(interval); 
+
+    return () => clearInterval(interval);
   }, [props.date]);
 
   //DELETE TWEET
@@ -59,10 +59,10 @@ function Tweet(props) {
     const parts = str.split(/(\s|#[A-zÀ-ú0-9]+)/gi); // Sépare le texte en parties avec et sans #hashtag
     return parts.map((part, index) => {
       // Si c'est un hashtag, on crée un lien React
-      if (part.startsWith('#')) {
+      if (part.startsWith("#")) {
         const hashtag = part.slice(1);
         return (
-          <Link key={index} href={`/hashtag/${hashtag}`}>
+          <Link key={index} href={`/trends/${hashtag}`}>
             <a>{part}</a>
           </Link>
         );
@@ -95,7 +95,8 @@ function Tweet(props) {
             onClick={handleLike}
           />{" "}
           {props.isLiked.length}
-        </p>{" "}&nbsp;{" "}
+        </p>{" "}
+        &nbsp;{" "}
         {props.token === user.token && (
           <FontAwesomeIcon
             icon={faTrashCan}

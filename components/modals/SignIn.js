@@ -2,22 +2,21 @@ import { Button, Modal } from "antd";
 import React from "react";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "../styles/Signup.module.css";
+import styles from "../../styles/Modal.module.css";
 import { useDispatch } from "react-redux";
-import { login } from "../reducers/users";
+import { login } from "../../reducers/users";
 import { useRouter } from "next/router";
-import BACKEND_URL from "../utils/config";
+import BACKEND_URL from "../../utils/config";
 
-function SignUpModal({
-  isSignUpModalOpen,
-  handleSignUpOk,
-  handleSignUpCancel,
+function SignInModal({
+  isSignInModalOpen,
+  handleSignInOk,
+  handleSignInCancel,
 }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [firstname, setFirstname] = useState(null);
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const modalStyles = {
     content: { backgroundColor: "rgb(21, 29, 38)" },
@@ -26,31 +25,34 @@ function SignUpModal({
   };
 
   useEffect(() => {
-    if (!isSignUpModalOpen) {
-      setFirstname(null);
-      setUsername(null);
-      setPassword(null);
+    if (!isSignInModalOpen) {
+      setUsername("");
+      setPassword("");
     }
-  }, [isSignUpModalOpen]);
+  }, [isSignInModalOpen]);
 
-  const submitSignUp = () => {
-    if (!firstname?.trim() || !username?.trim() || !password?.trim()) {
+  const submitSignIn = () => {
+    if (!username?.trim() || !password?.trim()) {
       alert("All fields are mandatory.");
       return;
     }
 
-    fetch(`${BACKEND_URL}/users/signup`, {
+    fetch(`${BACKEND_URL}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstname, username, password }),
+      body: JSON.stringify({ username, password }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
           dispatch(
-            login({ firstname, username, token: data.token, image: data.image })
+            login({
+              firstname: data.firstname,
+              username,
+              token: data.token,
+              image: data.image,
+            })
           );
-          setFirstname("");
           setUsername("");
           setPassword("");
           router.push("/home");
@@ -62,38 +64,26 @@ function SignUpModal({
 
   return (
     <Modal
-      open={isSignUpModalOpen}
-      onOk={handleSignUpOk}
-      onCancel={handleSignUpCancel}
+      open={isSignInModalOpen}
+      onOk={handleSignInOk}
+      onCancel={handleSignInCancel}
       footer={[
-        <Button
-          key="signup"
-          onClick={submitSignUp}
-          className={styles.signupBtnModal}
-        >
-          Sign up
+        <Button key="SignIn" onClick={submitSignIn} className={styles.modalBtn}>
+          Sign in
         </Button>,
       ]}
-      className={styles.SignUpModal}
+      className={styles.modal}
       styles={modalStyles}
     >
       <Image src="/logo.png" alt="Logo" width={50} height={50} />
-      <h3>Create your Hackatweet account</h3>
-      <input
-        type="text"
-        id="firstname"
-        onChange={(e) => setFirstname(e.target.value)}
-        value={firstname}
-        placeholder="Firstname"
-        className={styles.inputSignup}
-      />
+      <h3>Connect to Hackatweet</h3>
       <input
         type="text"
         id="username"
         onChange={(e) => setUsername(e.target.value)}
         value={username}
         placeholder="Username"
-        className={styles.inputSignup}
+        className={styles.modalInput}
       />
       <input
         type="password"
@@ -101,10 +91,10 @@ function SignUpModal({
         onChange={(e) => setPassword(e.target.value)}
         value={password}
         placeholder="Password"
-        className={styles.inputSignup}
+        className={styles.modalInput}
       />
     </Modal>
   );
 }
 
-export default SignUpModal;
+export default SignInModal;

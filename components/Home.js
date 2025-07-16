@@ -7,8 +7,8 @@ import LastTweets from "./LastTweets";
 import Hashtag from "./Hashtag";
 import Trends from "./Trends";
 import Link from "next/link";
-import PictureProfileModal from "./ProfilePicture";
-import FirstnameModal from "./Firstname";
+import PictureProfileModal from "./modals/ProfilePicture";
+import FirstnameModal from "./modals/Firstname";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
@@ -19,7 +19,7 @@ function Home() {
   const user = useSelector((state) => state.users.value);
 
   const hashtag = router.query.hashtag;
-  const isHashtagPage = router.pathname.includes("/hashtag");
+  const isHashtagPage = router.pathname.includes("/trends");
 
   //REFRESH TWEETS QUAND CHANGEMENT PICTURE PROFILE ET FIRSTNAME
   const [refreshTweets, setRefreshTweets] = useState(false);
